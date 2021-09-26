@@ -1,0 +1,78 @@
+<h1 class="title animate__animated animate__jackInTheBox">{{ title }}</h1>
+<ul class="animate__animated animate__flipInX" *ngIf="mode == 'list'">
+    <p class="text-center" *ngIf="!todos.length">Não há nenhuma tarefa</p>
+	<li *ngFor="let todo of todos">
+        {{todo.title}}
+        <button (click)="remove(todo)">
+            <i class="far fa-trash-alt"></i>
+        </button>
+        <button 
+            *ngIf="!todo.done" 
+            (click)="todo.done = !todo.done; save()"
+        >
+            <i class="far fa-check-circle"></i>
+        </button>
+        <button 
+            *ngIf="todo.done" 
+            (click)="todo.done = !todo.done; save()"
+        >
+            <i class="fas fa-check-circle"></i>
+        </button>
+	</li>
+</ul>
+
+
+<div 
+    id="modal" 
+    *ngIf="mode == 'add'" 
+    class="animate__animated animate__flipInX">
+    <h1 class="text-center">Nova Tarefa</h1>
+
+    <form [formGroup]="form">
+        <input 
+            type="text" 
+            placeholder="Título da tarefa"
+            maxlength="60"
+            formControlName="title"
+        >
+        <p class="text-center">
+            <small 
+                *ngIf="form.controls.title.invalid && !form.controls.title.pristine"
+                class="danger"
+            >
+                Este campo deve conter entre 3 e 60 caracteres<br>
+            </small>
+        </p>
+        
+        <p class="text-center">
+            <button
+                class="button"
+                (click)="add()" 
+                [disabled]="form.invalid"
+            >
+                <i class="far fa-save"></i>    
+                Salvar
+            </button>
+        </p>
+    </form>
+</div>
+
+<button 
+    class="add-button animate__animated animate__fadeInUp button"
+    (click)="mode = 'add'"
+    *ngIf="mode === 'list'"
+>
+    <i class="fas fa-plus-circle"></i>
+    NOVA TAREFA
+</button>
+
+<button 
+    class="add-button animate__animated animate__fadeInUp button"
+    (click)="mode = 'list'"
+    *ngIf="mode === 'add'"
+>
+    <i class="fas fa-times"></i>
+    CANCELAR
+</button>
+
+<router-outlet></router-outlet>
